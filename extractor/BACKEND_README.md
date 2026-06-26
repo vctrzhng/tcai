@@ -39,6 +39,13 @@ TCAI_MOCK=1 uvicorn main:app --reload
 | GET | `/analysis/best-pricing` | buyer-favorability ranking (see `score_pricing`) |
 | GET | `/analysis/unfavorable` | rule-based risk flags with severity |
 | GET | `/analysis/benchmark` | dataset-wide numeric stats + categorical distributions |
+| POST | `/analysis/insights` | body `{kind, contract_ids?, voice?}` → computed table + 3–5 grounded insights + recommendation + `grounding_warnings` |
+
+`/analysis/insights` `kind` ∈ {`compare`, `best_pricing`, `unfavorable`, `benchmark`};
+`voice` ∈ {`buyer_advocate` (default), `neutral`}. The LLM receives only the
+already-computed table and may cite only its values; `insights.py` then verifies
+in code that every number cited appears in the table (`grounding_warnings` lists
+any that don't — empty means fully grounded).
 
 ## Design notes
 

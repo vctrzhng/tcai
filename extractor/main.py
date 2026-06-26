@@ -22,6 +22,7 @@ from pydantic import BaseModel
 
 import db
 import analysis
+import insights as insights_mod
 from extraction import ingest_text, extract_contract, _call_claude
 
 # Ensure the table exists as soon as this module is imported (covers TestClient,
@@ -124,3 +125,19 @@ def unfavorable():
 @app.get("/analysis/benchmark")
 def benchmark():
     return analysis.benchmark()
+
+
+class InsightReq(BaseModel):
+    kind: str = "compare"               # compare | best_pricing | unfavorable | benchmark
+    contract_ids: list[str] | None = None
+    voice: str = "buyer_advocate"       # buyer_advocate | neutral
+
+
+@app.post("/analysis/insights")
+def insights(req: InsightReq):
+    if req.kind not in ("compare", "best_pricing", "unfavorable", "benchmark"):
+        raise HTTPException(400, "kind must be one of: compare, best_pricing, "
+                                 "unfavorable, benchmark")
+    call_fn = insights_mod._mock_insights if USE_MOCK else insights_mod._call_claude_insights
+    return insights_mod.generate_insights(req.kind, req.contract_ids, req.voice,
+                                          call_fn=call_fn)
