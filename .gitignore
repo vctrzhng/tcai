@@ -1,0 +1,18 @@
+# secrets
+.env
+*.env
+
+# database (generated at runtime)
+*.db
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# generated intermediate
+generators/docx_content.json
+
+# os
+.DS_Store

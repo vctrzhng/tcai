@@ -1,0 +1,153 @@
+{
+  "_README": "Ground-truth answer key for mock contracts. 'normalized' = the value a correct extraction must produce. 'difficulty' and 'traps' describe what makes each contract hard, so you know what your extractor is being tested against. Compare your extractor output against the 'normalized' values to compute accuracy.",
+  "_schema_enums": {
+    "pricing_model": ["fixed", "tiered_volume", "usage_based", "subscription", "cost_plus", "hybrid", "unknown"],
+    "indemnification": ["mutual", "vendor_only", "customer_only", "none", "unknown"]
+  },
+  "contracts": [
+    {
+      "filename": "01_northwind_msa_CLEAN.pdf",
+      "difficulty": "easy",
+      "traps": "None. Clean headings, terms stated plainly. This is your baseline — extractor should score ~100% here.",
+      "normalized": {
+        "vendor_name": "Northwind Supply Co.",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2024-03-01",
+        "pricing_model": "fixed",
+        "payment_terms_days": 30,
+        "discount_pct": 2.0,
+        "minimum_spend": 100000,
+        "minimum_spend_period": "annual",
+        "term_length_months": 24,
+        "auto_renewal": true,
+        "renewal_notice_days": 60,
+        "termination_for_convenience": true,
+        "termination_notice_days": 30,
+        "liability_cap": 100000,
+        "liability_cap_type": "fixed_amount",
+        "governing_law": "Delaware",
+        "indemnification": "mutual"
+      }
+    },
+    {
+      "filename": "02_acme_msa_MODERATE.pdf",
+      "difficulty": "moderate",
+      "traps": "Payment terms spelled out in words ('forty-five (45) days'). Discount is conditional prompt-pay. Tiered pricing references an exhibit. Min spend stated as committed volume.",
+      "normalized": {
+        "vendor_name": "Acme Industrial Partners, Inc.",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2023-11-15",
+        "pricing_model": "tiered_volume",
+        "payment_terms_days": 45,
+        "discount_pct": 5.0,
+        "minimum_spend": 250000,
+        "minimum_spend_period": "annual",
+        "term_length_months": 36,
+        "auto_renewal": true,
+        "renewal_notice_days": 90,
+        "termination_for_convenience": false,
+        "termination_notice_days": null,
+        "liability_cap": 500000,
+        "liability_cap_type": "fixed_amount",
+        "governing_law": "New York",
+        "indemnification": "vendor_only"
+      }
+    },
+    {
+      "filename": "03_globex_saas_MODERATE.docx",
+      "difficulty": "moderate",
+      "traps": "Subscription/usage hybrid wording. Liability cap expressed as '12 months of fees' not a dollar figure (cap_type matters, normalized amount is null). Auto-renewal buried mid-paragraph, no 'Renewal' heading.",
+      "normalized": {
+        "vendor_name": "Globex Cloud Systems",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2024-07-01",
+        "pricing_model": "subscription",
+        "payment_terms_days": 30,
+        "discount_pct": null,
+        "minimum_spend": 60000,
+        "minimum_spend_period": "annual",
+        "term_length_months": 12,
+        "auto_renewal": true,
+        "renewal_notice_days": 30,
+        "termination_for_convenience": true,
+        "termination_notice_days": 90,
+        "liability_cap": null,
+        "liability_cap_type": "fees_paid_12mo",
+        "governing_law": "California",
+        "indemnification": "mutual"
+      }
+    },
+    {
+      "filename": "04_initech_services_MESSY.pdf",
+      "difficulty": "hard",
+      "traps": "Termination right granted in one section then heavily restricted in another (test conflicting terms — correct answer is the net effect: convenience termination only after month 18). Liability cap LOWER than minimum spend (unfavorable flag should fire). Discount silent (null). Governing law in a 'Miscellaneous' boilerplate block at the very end.",
+      "normalized": {
+        "vendor_name": "Initech Services Group",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2024-01-10",
+        "pricing_model": "cost_plus",
+        "payment_terms_days": 60,
+        "discount_pct": null,
+        "minimum_spend": 400000,
+        "minimum_spend_period": "annual",
+        "term_length_months": 48,
+        "auto_renewal": false,
+        "renewal_notice_days": null,
+        "termination_for_convenience": true,
+        "termination_notice_days": 120,
+        "liability_cap": 150000,
+        "liability_cap_type": "fixed_amount",
+        "governing_law": "Texas",
+        "indemnification": "customer_only"
+      }
+    },
+    {
+      "filename": "05_umbrella_supply_MESSY.docx",
+      "difficulty": "hard",
+      "traps": "Several fields genuinely ABSENT (silent on liability cap entirely -> null; silent on governing law -> null). Min spend is monthly not annual (period normalization matters). Payment terms unusual ('upon receipt' -> 0 days). Long run-on sentences, sparse headings.",
+      "normalized": {
+        "vendor_name": "Umbrella Supply Chain Ltd.",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2025-02-20",
+        "pricing_model": "usage_based",
+        "payment_terms_days": 0,
+        "discount_pct": 10.0,
+        "minimum_spend": 15000,
+        "minimum_spend_period": "monthly",
+        "term_length_months": 12,
+        "auto_renewal": true,
+        "renewal_notice_days": 45,
+        "termination_for_convenience": false,
+        "termination_notice_days": null,
+        "liability_cap": null,
+        "liability_cap_type": null,
+        "governing_law": null,
+        "indemnification": "none"
+      }
+    },
+    {
+      "filename": "06_stark_equipment_MODERATE.pdf",
+      "difficulty": "moderate",
+      "traps": "Strong buyer-favorable terms (good benchmark contrast). Hybrid pricing (fixed base + usage). Two discount figures mentioned (volume 8% AND prompt-pay 2%) — schema captures the larger/headline volume discount at 8%; document your rule for which one wins.",
+      "normalized": {
+        "vendor_name": "Stark Equipment Co.",
+        "counterparty_name": "Keystone Procurement LLC",
+        "effective_date": "2024-09-05",
+        "pricing_model": "hybrid",
+        "payment_terms_days": 90,
+        "discount_pct": 8.0,
+        "minimum_spend": 0,
+        "minimum_spend_period": null,
+        "term_length_months": 12,
+        "auto_renewal": false,
+        "renewal_notice_days": null,
+        "termination_for_convenience": true,
+        "termination_notice_days": 30,
+        "liability_cap": 2000000,
+        "liability_cap_type": "fixed_amount",
+        "governing_law": "Illinois",
+        "indemnification": "mutual"
+      }
+    }
+  ]
+}
