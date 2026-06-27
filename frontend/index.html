@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TCAI — Contract Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#" onclick="go('upload');return false;">TCAI<span>.</span></a>
+      <nav class="nav" id="tabs">
+        <button class="tab active" data-view="upload" onclick="go('upload')">Upload</button>
+        <button class="tab" data-view="library" onclick="go('library')">Library</button>
+        <button class="tab" data-view="compare" onclick="go('compare')">Compare</button>
+        <button class="tab" data-view="insights" onclick="go('insights')">Insights</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- UPLOAD ------------------------------------------------------------ -->
+    <section class="view active" id="view-upload">
+      <div class="view-head">
+        <p class="eyebrow">Step one</p>
+        <h1 class="view-title">Upload contracts</h1>
+        <p class="view-lede">Drop in PDF or Word contracts. Each is read, its key
+          terms extracted into a consistent schema, and added to your dataset.
+          Low-confidence or risk fields are flagged for review.</p>
+      </div>
+
+      <div class="drop" id="drop" tabindex="0" role="button"
+           aria-label="Choose contract files to upload">
+        <p class="drop-title">Drop contracts here</p>
+        <p class="drop-hint">or click to choose &middot; <code>.pdf</code> <code>.docx</code></p>
+      </div>
+      <input type="file" id="file-input" multiple accept=".pdf,.docx" hidden />
+
+      <div id="upload-status"></div>
+      <div id="upload-results"></div>
+    </section>
+
+    <!-- LIBRARY ----------------------------------------------------------- -->
+    <section class="view" id="view-library">
+      <div class="view-head">
+        <p class="eyebrow">The dataset</p>
+        <h1 class="view-title">Contract library</h1>
+        <p class="view-lede">Every contract you've uploaded, with its extracted
+          terms. The spreadsheet you didn't have to fill in by hand.</p>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn" onclick="loadLibrary()">Refresh</button>
+        <span class="card-meta" id="library-count"></span>
+      </div>
+      <div id="library-body"></div>
+    </section>
+
+    <!-- COMPARE ----------------------------------------------------------- -->
+    <section class="view" id="view-compare">
+      <div class="view-head">
+        <p class="eyebrow">Side by side</p>
+        <h1 class="view-title">Compare vendors</h1>
+        <p class="view-lede">All contracts across the comparison fields. Terracotta
+          marks the most buyer-favorable value in each ranked column; the lighter
+          clay marks the least.</p>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn btn-primary" onclick="loadCompare()">Build comparison</button>
+      </div>
+      <div id="compare-body"></div>
+    </section>
+
+    <!-- INSIGHTS ---------------------------------------------------------- -->
+    <section class="view" id="view-insights">
+      <div class="view-head">
+        <p class="eyebrow">Decision support</p>
+        <h1 class="view-title">Insights &amp; recommendations</h1>
+        <p class="view-lede">Pick a lens. The numbers are computed from your
+          dataset; the narrator only phrases what the table already shows, and
+          every figure it cites is verified against the source.</p>
+      </div>
+      <div class="controls">
+        <select class="input" id="insight-kind">
+          <option value="best_pricing">Best pricing</option>
+          <option value="unfavorable">Unfavorable terms</option>
+          <option value="compare">Cross-contract comparison</option>
+          <option value="benchmark">Benchmark the dataset</option>
+        </select>
+        <select class="input" id="insight-voice">
+          <option value="buyer_advocate">Buyer's advocate</option>
+          <option value="neutral">Neutral analyst</option>
+        </select>
+        <button class="btn btn-primary" onclick="loadInsights()">Generate insights</button>
+      </div>
+      <div id="insights-body"></div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

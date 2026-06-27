@@ -1,0 +1,14 @@
+# Core extraction + API
+anthropic
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Mock contract generation (optional; only to regenerate mocks)
+reportlab
+
+# Note: text extraction uses system tools `pdftotext`/`pdfinfo` (poppler-utils)
+# and `pandoc`. Install those via your OS package manager, e.g.:
+#   macOS:  brew install poppler pandoc
+#   Ubuntu: sudo apt install poppler-utils pandoc
+# DOCX generation also needs Node + the `docx` package: npm install -g docx
